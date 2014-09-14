@@ -1,0 +1,63 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.73.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 e5abe47e3aede516cf26ad3c2fc65e71149c2d60 .gitignore
+SHA1 97346073d96e06a60cbba4170ab882a2a0bdf7dd .includepath
+SHA1 858bc3d05501c25bcd55a52f4c1354cf82029074 .project
+SHA1 6d8a06b0a3395c74037897476eadb764d7f2d22d .settings/org.eclipse.core.resources.prefs
+SHA1 b47eb48025fe917e9540ba67c455a2fd104ae2a8 .settings/org.eclipse.ltk.core.refactoring.prefs
+SHA1 18bd4e0acd6ed6f66e75aba61dc0874c175f82a3 .settings/org.eclipse.mylyn.tasks.ui.prefs
+SHA1 0221bc010915b087d3297498f8ea0a6092da8cd3 .travis.yml
+SHA1 0612e18a0936d0d53fad70dce617d67bb26df5a1 Build.PL
+SHA1 69258277e31246a96aacb8581fe83a5720d1f1b2 Changes
+SHA1 11f320a116d3bfd435111e10e4224fd5d77e7adf LICENSE
+SHA1 f8cafa7232054866d197e2d4eee281cb9b5d863d MANIFEST
+SHA1 33f0f8a3bbce5ba78082bb91095b76895d868863 MANIFEST.SKIP
+SHA1 0a442f1a50a90d7a1c508f95acc3f1c15e6e4737 META.json
+SHA1 331f2d0c55f0556074e506db363513a59e0a0f95 META.yml
+SHA1 adf6f3ac1e9a39cd82a57d6d650a4aaf3eac8e9d Makefile.PL
+SHA1 3b91b29dfb917922cedd61129f4e5df22c4398a0 README.pod
+SHA1 d4cb82608a972030255550bbdd0e3da3de24ef7b TESTING
+SHA1 0c7306da36c46f7c0fd38352d8291583f90db197 lib/XML/AppleConfigProfile.pm
+SHA1 0a48f9c70815af958d23002b88a439e23628ec3c lib/XML/AppleConfigProfile/Payload/Certificate.pm
+SHA1 2239b22c27454103b317439868751c85dce25e28 lib/XML/AppleConfigProfile/Payload/Certificate/PEM.pm
+SHA1 db3ed0d89a42063b09ccc74efa46c6afc185278e lib/XML/AppleConfigProfile/Payload/Certificate/PKCS1.pm
+SHA1 73b459d7c8786bf0e9ad11f4ac5a68ad169d6a56 lib/XML/AppleConfigProfile/Payload/Certificate/PKCS12.pm
+SHA1 2b5f90826baf6ef64eed90ecf05a343766c9b624 lib/XML/AppleConfigProfile/Payload/Certificate/Root.pm
+SHA1 b5f93fd457dcad95259890189211f30ccf27eeeb lib/XML/AppleConfigProfile/Payload/Common.pm
+SHA1 e9e6de939fe49ab4f7f30481b2db73afc147cc18 lib/XML/AppleConfigProfile/Payload/Tie/Array.pm
+SHA1 e49e2dab5448cd0f1263d717af3fb3c5a9d71548 lib/XML/AppleConfigProfile/Payload/Tie/Root.pm
+SHA1 60ccece37bf18c2a94d82789fa2058e2f456b796 lib/XML/AppleConfigProfile/Payload/Types.pm
+SHA1 3905caf4343dceedd7893fc3b8c49108b12267c1 lib/XML/AppleConfigProfile/Payload/Types/Serialize.pm
+SHA1 3dc61dac40bdafeb5e4e4b7933c1cedf5516e14f lib/XML/AppleConfigProfile/Payload/Types/Validation.pm
+SHA1 39431bd7713ddf8989c5dc73f9643556079f890a lib/XML/AppleConfigProfile/Targets.pm
+SHA1 da39a3ee5e6b4b0d3255bfef95601890afd80709 payload
+SHA1 cec195ddf7a6b6c238ce53ff0f73a3b9a4da33e7 t/00-manifest.t
+SHA1 d726a633f73630ddbd3ad7495c76912871ffa72d t/01-load.t
+SHA1 78579ce0720fb05beb57a5b2b977e4970538c15a t/08-pod.t
+SHA1 a3526c0cabf1c6180f49d9b8bc26950f455abea5 t/09-pod-coverage.t
+SHA1 97e887a9e677df783b47df60fdc208ea06fbb172 t/10-string.t
+SHA1 51e2f53c8338a415e2eed6eb521d081eb6d78afa t/11-number.t
+SHA1 74696032afa784502748702598ce4ef00a56cc2a t/12-data.t
+SHA1 fc245a2e47d4b193e2c9045076450bce3b3a1be6 t/13-real.t
+SHA1 eb47560c089b8b27e469fb66388d69e62d3dd2c3 t/15-array.t
+SHA1 a64e2941a0638fe224fa9cb825b6fdbe31f606d8 t/17-uuid.t
+-----BEGIN PGP SIGNATURE-----
+
+iD8DBQFUFTRRKktx/CQzhy4RAhl1AJ44ieZcgtiynS32cwZEwiPM+730FQCfeJoT
+IS/quIT6fF4Qn7zCuPdsgvg=
+=O08J
+-----END PGP SIGNATURE-----

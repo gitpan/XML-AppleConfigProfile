@@ -1,0 +1,108 @@
+{
+   "abstract" : "An OO interface to Apple Configuration Profiles.",
+   "author" : [
+      "A. Karl Kornel <karl@kornel.us>"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "Module::Build version 0.421",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "XML-AppleConfigProfile",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "File::Temp" : "0",
+            "Module::Signature" : "0",
+            "Test::Exception" : "0",
+            "Test::More" : "0"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Data::GUID" : "0",
+            "DateTime" : "0",
+            "DateTime::Format::Flexible" : "0",
+            "Exporter::Easy" : "0",
+            "Mac::PropertyList" : "1.4",
+            "Readonly" : "0",
+            "Regexp::Common" : "0",
+            "Scalar::Util" : "0",
+            "Try::Tiny" : "0"
+         }
+      }
+   },
+   "provides" : {
+      "XML::AppleConfigProfile" : {
+         "file" : "lib/XML/AppleConfigProfile.pm",
+         "version" : "0.00_001"
+      },
+      "XML::AppleConfigProfile::Payload::Certificate" : {
+         "file" : "lib/XML/AppleConfigProfile/Payload/Certificate.pm",
+         "version" : "0.00_001"
+      },
+      "XML::AppleConfigProfile::Payload::Certificate::PEM" : {
+         "file" : "lib/XML/AppleConfigProfile/Payload/Certificate/PEM.pm",
+         "version" : "0.00_001"
+      },
+      "XML::AppleConfigProfile::Payload::Certificate::PKCS1" : {
+         "file" : "lib/XML/AppleConfigProfile/Payload/Certificate/PKCS1.pm",
+         "version" : "0.00_001"
+      },
+      "XML::AppleConfigProfile::Payload::Certificate::PKCS12" : {
+         "file" : "lib/XML/AppleConfigProfile/Payload/Certificate/PKCS12.pm",
+         "version" : "0.00_001"
+      },
+      "XML::AppleConfigProfile::Payload::Certificate::Root" : {
+         "file" : "lib/XML/AppleConfigProfile/Payload/Certificate/Root.pm",
+         "version" : "0.00_001"
+      },
+      "XML::AppleConfigProfile::Payload::Common" : {
+         "file" : "lib/XML/AppleConfigProfile/Payload/Common.pm",
+         "version" : "0.00_001"
+      },
+      "XML::AppleConfigProfile::Payload::Tie::Array" : {
+         "file" : "lib/XML/AppleConfigProfile/Payload/Tie/Array.pm",
+         "version" : "0.00_001"
+      },
+      "XML::AppleConfigProfile::Payload::Tie::Root" : {
+         "file" : "lib/XML/AppleConfigProfile/Payload/Tie/Root.pm",
+         "version" : "0.00_001"
+      },
+      "XML::AppleConfigProfile::Payload::Types" : {
+         "file" : "lib/XML/AppleConfigProfile/Payload/Types.pm",
+         "version" : "0.00_001"
+      },
+      "XML::AppleConfigProfile::Payload::Types::Serialize" : {
+         "file" : "lib/XML/AppleConfigProfile/Payload/Types/Serialize.pm",
+         "version" : "0.00_001"
+      },
+      "XML::AppleConfigProfile::Payload::Types::Validation" : {
+         "file" : "lib/XML/AppleConfigProfile/Payload/Types/Validation.pm",
+         "version" : "0.00_001"
+      },
+      "XML::AppleConfigProfile::Targets" : {
+         "file" : "lib/XML/AppleConfigProfile/Targets.pm",
+         "version" : "0.00_001"
+      }
+   },
+   "release_status" : "unstable",
+   "resources" : {
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ],
+      "repository" : {
+         "url" : "https://github.com/akkornel/XML-AppleConfigProfile"
+      }
+   },
+   "version" : "0.00_001"
+}

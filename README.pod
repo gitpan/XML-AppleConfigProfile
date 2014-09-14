@@ -1,0 +1,119 @@
+=pod
+
+=head1 XML-AppleConfigProfile: Make Apple Configuration Profiles in Perl
+
+Apple provides users with a way to configure Apple devices (running iOS or Mac
+OS X) using ready-made configuration files, which Apple calls
+B<Configuration Profiles>.  This suite of Perl modules is intended to aid
+people who would like to generate their own configuration profiles, without
+having to mess around with the XML themselves.
+
+Configuration profiles can be used by iOS and Mac OS X to set a number of
+general and user-specific items.  Examples include:
+
+=over 4
+
+=item *
+
+Configuring an LDAP server, for directory search in Mail and Contacts.
+
+=item *
+
+Specifying password requirements to match company policy (and common sense).
+
+=item *
+
+Configuring an email account, with or without a user's credentials.
+
+=item *
+
+Adding new certificate authorities.
+
+=back
+
+Configuration profiles can be pre-made static files, or they can be
+dynamically-generated with configurations (such as usernames and passwords)
+that are specific to a user.  Configuration profiles may be encrypted (so they
+may only be read on a specific device) and signed (to verify that they have not
+been modified by anyone other than the profile's creator).
+
+Much more information is available in the POD-format documentation embedded in
+each module. 
+
+=head2 Installation
+
+Installing the distribution is fairly straightforward.  This release uses
+C<Module::Build>, so installation can be completed by running four commands:
+
+	perl Build.PL
+	./Build
+	./Build test
+	./Build install
+
+This release relies on a number of dependencies, but they should be easy to
+install:
+
+=over 4
+
+=item *
+
+Data::GUID
+
+=item *
+
+Exporter::Easy
+
+=item *
+
+Mac::PropertyList
+
+=item *
+
+Readonly
+
+B<NOTE:> C<Readonly::XS> is not required, nor is it even necessary any more.
+
+=item *
+
+Regexp::Common
+
+=back
+
+=head2 Documentation
+
+All of the Perl modules have POD embedded throughout.  To get the documentation
+on a particular module, you can use C<perldoc> after installation, for example:
+
+    perldoc XML::AppleConfigProfile
+
+The documentation in C<XML::AppleConfigProfile> is a good place for new clients
+to start reading.
+
+Documentation can also be found on CPAN at
+L<http://search.cpan.org/search?query=XML&mode=module>.
+
+Your code editor probably also has some way of easily accessing module docs.
+
+=head2 Issues
+
+The repository for this software is Github.  You can find us here:
+
+L<http://github.com/akkornel/XML-AppleConfigProfile>
+
+If you have a bug, it should be reported on the Github issue tracker, here:
+
+L<https://github.com/akkornel/XML-AppleConfigProfile/issues>
+
+Contributions are welcome!  At the very least, git-generated patches are needed,
+and Github pull requests are preferred, especially if your contribution is
+closing one or more existing issues!
+
+=head2 Copyright and License
+
+This release is copyright © 2014 A. Karl Kornel
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See L<http://dev.perl.org/licenses/> for more information.
