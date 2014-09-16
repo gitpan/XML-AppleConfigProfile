@@ -1,10 +1,3 @@
-.gitignore
-.includepath
-.project
-.settings/org.eclipse.core.resources.prefs
-.settings/org.eclipse.ltk.core.refactoring.prefs
-.settings/org.eclipse.mylyn.tasks.ui.prefs
-.travis.yml
 Build.PL
 Changes
 lib/XML/AppleConfigProfile.pm
@@ -14,18 +7,19 @@ lib/XML/AppleConfigProfile/Payload/Certificate/PKCS1.pm
 lib/XML/AppleConfigProfile/Payload/Certificate/PKCS12.pm
 lib/XML/AppleConfigProfile/Payload/Certificate/Root.pm
 lib/XML/AppleConfigProfile/Payload/Common.pm
+lib/XML/AppleConfigProfile/Payload/Email.pm
 lib/XML/AppleConfigProfile/Payload/Tie/Array.pm
 lib/XML/AppleConfigProfile/Payload/Tie/Root.pm
 lib/XML/AppleConfigProfile/Payload/Types.pm
 lib/XML/AppleConfigProfile/Payload/Types/Serialize.pm
 lib/XML/AppleConfigProfile/Payload/Types/Validation.pm
 lib/XML/AppleConfigProfile/Targets.pm
+LICENSE
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.json
 META.yml
-payload
 README.pod
 t/00-manifest.t
 t/01-load.t
@@ -33,10 +27,9 @@ t/08-pod.t
 t/09-pod-coverage.t
 t/10-string.t
 t/11-number.t
-t/12-data.t
 t/13-real.t
 t/15-array.t
 t/17-uuid.t
+t/37-Email.t
 TESTING
-LICENSE
 SIGNATURE    Added here by Module::Build

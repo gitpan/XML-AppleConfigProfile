@@ -7,12 +7,14 @@ use 5.14.4;
 use strict;
 use warnings FATAL => 'all';
 
-our $VERSION = '0.00_001';
+our $VERSION = '0.00_002';
 
 use Tie::Hash; # Also gives us Tie::StdHash
 use XML::AppleConfigProfile::Payload::Tie::Array;
 use XML::AppleConfigProfile::Payload::Types qw($ProfileArray $ProfileDict $ProfileClass);
 
+
+=encoding utf8
 
 =head1 NAME
 
@@ -37,7 +39,7 @@ the list from C<XML::AppleConfigProfile::Payload::Common>.
 
 =head2 "CLASS" METHODS
 
-=head2 tie %hash, 'XML::AppleConfigProfile::Payload::Tie::Root', $self
+=head3 tie %hash, 'XML::AppleConfigProfile::Payload::Tie::Root', $self
 
 This method is not useful in client code, but it is documented for future
 developers of this software.
@@ -87,7 +89,7 @@ sub TIEHASH {
 }
 
 
-=head2 FETCH
+=head3 FETCH
 
 Works as one would expect with a Perl hash.  Either the value is returned, or
 C<undef> is returned.  Exactly I<what> you get depends on the payload class and
@@ -99,6 +101,13 @@ documentation, as well as L<XML::AppleConfigProfile::Payload::Types>.
 sub FETCH {
     my ($self, $key) = @_;
     
+    my $key_info = $self->{object}->keys()->{$key};
+    
+    # If the payload key has a fixed value, return that
+    if (exists $key_info->{value}) {
+        return $key_info->{value};
+    }
+    
     # Our EXISTS check returns true if the key is a valid payload key name.
     # Therefore, we need to do our own exists check, and possible return undef.
     if (exists $self->{payload}->{$key}) {
@@ -107,22 +116,21 @@ sub FETCH {
     
     # At this point, our key doesn't exist right now, but we need to check for
     # some complex types.
-    my $key_info = $self->{object}->keys()->{$key};
     my $type = $key_info->{type};
     
     # If the key is an array, set up a new Array tie
-    # Exception:  If the subtype is a class, then use construct()
+#    # Exception:  If the subtype is a class, then use construct()
     if ($type == $ProfileArray) {
         my $subtype = $key_info->{subtype};
-        
-        if ($subtype == $ProfileClass) {
-            my $object = $self->{object}->construct($key);
-            $self->{payload}->{$key} = $object;
-        }
-        else {
+#        
+#        if ($subtype == $ProfileClass) {
+#            my $object = $self->{object}->construct($key);
+#            $self->{payload}->{$key} = $object;
+#        }
+#        else {
             tie my @array, 'XML::AppleConfigProfile::Payload::Tie::Array', $subtype;
             $self->{payload}->{$key} = \@array;
-        }
+#        }
         
         return $self->{payload}->{$key};
     }
@@ -159,7 +167,7 @@ sub FETCH {
 }
 
 
-=head2 STORE
+=head3 STORE
 
 Works I<almost> as one would expect with a Perl hash.  When setting a value to
 a key, two checks are performed:
@@ -187,12 +195,6 @@ If the validation fails, the program dies.
 
 sub STORE {
     my ($self, $key, $value) = @_;
-    
-    # If we are setting to undef, then just drop the key.
-#    if (!defined $value) {
-#        $self->DELETE($key);
-#        return;
-#    }
     
     # Check if the proposed value is valid, and store if it is.
     # (Validating also de-taints the value, if it's valid)
@@ -255,7 +257,7 @@ sub EXISTS {
 }
 
 
-=head2 keys
+=head3 keys
 
 C<keys> returns a list of keys I<only for payload keys that have been set>.
 
@@ -282,7 +284,7 @@ sub NEXTKEY {
 }
 
 
-=head2 scalar
+=head3 scalar
 
 C<scalar> returns the number of payload keys that have values set.
 

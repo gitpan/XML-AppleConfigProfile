@@ -8,13 +8,15 @@ use strict;
 use warnings FATAL => 'all';
 use base qw(XML::AppleConfigProfile::Payload::Certificate);
 
-our $VERSION = '0.00_001';
+our $VERSION = '0.00_002';
 
 use Readonly;
 use XML::AppleConfigProfile::Targets qw(:all);
 use XML::AppleConfigProfile::Payload::Certificate;
 use XML::AppleConfigProfile::Payload::Types qw($ProfileNumber $ProfileString);
 
+
+=encoding utf8
 
 =head1 NAME
 
@@ -23,7 +25,7 @@ a DER-format certificate.
 
 =head1 SYNOPSIS
 
-    use XML::AppleConfigProfile::Profile;
+    use XML::AppleConfigProfile;
     use XML::AppleConfigProfile::Payload::Certificate::Root;
     
     my $cert = new XML::AppleConfigProfile::Payload::Certificate::Root;
@@ -37,7 +39,7 @@ a DER-format certificate.
     my $profile = new XML::AppleConfigProfile::Profile;
     push @{$profile->content}, $cert;
     
-    print $profile->string;
+    print $profile->export;
     
 =head1 DESCRIPTION
 
@@ -100,7 +102,7 @@ Readonly our %payloadKeys => (
 
 =head1 ACKNOWLEDGEMENTS
 
-Refer to the L<XML::AppleConfigProfile> for acknowledgements.
+Refer to L<XML::AppleConfigProfile> for acknowledgements.
 
 =head1 AUTHOR
 

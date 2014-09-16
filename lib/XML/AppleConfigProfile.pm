@@ -12,8 +12,10 @@ use XML::AppleConfigProfile::Payload::Common;
 use XML::AppleConfigProfile::Payload::Types qw(:all);
 use XML::AppleConfigProfile::Targets qw(:all);
 
-our $VERSION = '0.00_001';
+our $VERSION = '0.00_002';
 
+
+=encoding utf8
 
 =head1 NAME
 
@@ -133,11 +135,18 @@ As an example, if you want to create a configuration profile that configures an
 IMAP email account, an LDAP server, and a passcode policy, you would need the
 following modules:
 
-* L<XML::AppleConfigProfile::Payload::Email> would configure the email account.
-* L<XML::AppleConfigProfile::Payload::LDAP> would configure the LDAP server.
-* L<XML::AppleConfigProfile::Payload::Passcode> would configure the passcode
+=over 4
+
+=item * L<XML::AppleConfigProfile::Payload::Email> would configure the email account.
+
+=item * L<XML::AppleConfigProfile::Payload::LDAP> would configure the LDAP server.
+
+=item * L<XML::AppleConfigProfile::Payload::Passcode> would configure the passcode
 policy.
-* This module would put everything together, and give you the final profile.
+
+=item * This module would put everything together, and give you the final profile.
+
+=back
 
 =cut
 
@@ -167,8 +176,10 @@ and are not reimplemented here.  See L<XML::AppleConfigProfile::Payload::Common>
     export([C<option1_name> => C<option1_value>, ...])
 
 Return a string containing the profile, serialized as XML.  The entire string
-will already be encoded as UTF-8.  This method is used when it is time to
-output a profile.
+will already be encoded as UTF-8.  If any UUID or Identifier keys have not been
+filled in, they are filled in with random values.
+
+This method is used when it is time to output a profile.
 
 Several parameters can be provided, which will influence how this method runs.
 
@@ -221,6 +232,8 @@ or C<version>.
 sub export {
     my $self = shift @_;
     
+    # Fill in identifiers/UUIDs, then convert to plist, and export
+    $self->populate_id;
     my $plist = $self->plist(@_);
     return Mac::PropertyList::plist_as_string($plist);
 }
@@ -323,12 +336,13 @@ device management (MDM) solution.  Once past, this profile will be marked as
 =cut
 
 Readonly our %payloadKeys => (
-    # Bring in the certificate keys...
+    # Bring in the common keys...
     %XML::AppleConfigProfile::Payload::Common::payloadKeys,
     
-    # Since we can't go any deeper, define the type and version!
+    #... and define our own!
     'PayloadContent' => {
         type => $ProfileArray,
+        subtype => $ProfileClass,
         description => 'The payloads to be delivered in this profile.',
         targets => {
             $TargetIOS => '5.0',
@@ -403,6 +417,7 @@ Readonly our %payloadKeys => (
     },
     'ConsentText' => {
         type => $ProfileDict,
+        subtype => $ProfileString,
         description => 'A dictionary where the keys are canonicalized IETF BCP '
             . '47 locale strings.  The key "default" may be used as the '
             . 'default entry.  The values are localized messages that the user '
@@ -498,7 +513,7 @@ L<http://cpanratings.perl.org/d/XML-AppleConfigProfile>
 
 This project is on GitHub:
 
- L<https://github.com/akkornel/XML-AppleConfigProfile>
+L<https://github.com/akkornel/XML-AppleConfigProfile>
 
 The web site linked above has the most recently-pushed code, along with
 information on how to get a copy to your computer.

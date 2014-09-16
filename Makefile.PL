@@ -13,6 +13,7 @@ WriteMakefile
                    'Module::Signature' => 0,
                    'DateTime' => 0,
                    'Test::Exception' => 0,
+                   'Email::Valid' => 0,
                    'Readonly' => 0,
                    'Exporter::Easy' => 0,
                    'Test::More' => 0,

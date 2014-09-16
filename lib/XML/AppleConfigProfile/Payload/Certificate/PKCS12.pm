@@ -8,13 +8,15 @@ use strict;
 use warnings FATAL => 'all';
 use base qw(XML::AppleConfigProfile::Payload::Certificate);
 
-our $VERSION = '0.00_001';
+our $VERSION = '0.00_002';
 
 use Readonly;
 use XML::AppleConfigProfile::Targets qw(:all);
 use XML::AppleConfigProfile::Payload::Certificate;
 use XML::AppleConfigProfile::Payload::Types qw($ProfileNumber $ProfileString);
 
+
+=encoding utf8
 
 =head1 NAME
 
@@ -23,7 +25,7 @@ one certificate and its matching private key.
 
 =head1 SYNOPSIS
 
-    use XML::AppleConfigProfile::Profile;
+    use XML::AppleConfigProfile;
     use XML::AppleConfigProfile::Payload::Certificate::PKCS12;
     
     my $cert = new XML::AppleConfigProfile::Payload::Certificate::PKCS12;
@@ -35,10 +37,10 @@ one certificate and its matching private key.
     $cert->payload->{Password} = 'Monkey123'; # DON'T DO THIS IN REAL LIFE!!!
     $cert->payload->{PayloadContent} = '.................'; # Binary data here
     
-    my $profile = new XML::AppleConfigProfile::Profile;
+    my $profile = new XML::AppleConfigProfile;
     push @{$profile->content}, $cert;
     
-    print $profile->string;
+    print $profile->export;
     
     
 =head1 DESCRIPTION
@@ -69,7 +71,7 @@ profile.
 
 =head2 C<PayloadType>
 
-This is fixed to the string C<com.apple.security.pem>.
+This is fixed to the string C<com.apple.security.pkcs12>.
 
 =head2 C<PayloadVersion>
 
@@ -116,7 +118,7 @@ Readonly our %payloadKeys => (
 
 =head1 ACKNOWLEDGEMENTS
 
-Refer to the L<XML::AppleConfigProfile> for acknowledgements.
+Refer to L<XML::AppleConfigProfile> for acknowledgements.
 
 =head1 AUTHOR
 

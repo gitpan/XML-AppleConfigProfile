@@ -7,13 +7,15 @@ use 5.14.4;
 use strict;
 use warnings FATAL => 'all';
 
-our $VERSION = '0.00_001';
+our $VERSION = '0.00_002';
 
 use Scalar::Util qw(blessed);
 use Tie::Array; # Also gives us Tie::StdArray
 use XML::AppleConfigProfile::Payload::Types qw(:all);
 use XML::AppleConfigProfile::Payload::Types::Validation qw(:types);
 
+
+=encoding utf8
 
 =head1 NAME
 
@@ -34,28 +36,22 @@ This class is used by payload classes to represent an array.
 
 =head2 "CLASS" METHODS
 
-=head2 tie @array, 'XML::AppleConfigProfile::Payload::Tie::Array', $value_type
+=head3 tie @array, 'XML::AppleConfigProfile::Payload::Tie::Array', $value_type
 
 When this class is tied to an array, C<TIEARRAY> will be called, with the class
 name as the first argument.
 
-C<$value_type> can be a scalar or a ref.  If C<$value_type> is a reference, it
-must be blessed.  We keep a record of C<$value_type>'s class, and all values
-placed into the array must be of the same class.  We let the class take
-responsibility for validating its contents.
+C<$value_type> is one of the types from
+L<XML::AppleConfigProfile::Payload::Types>.  The standard type validation
+functions from L<XML::AppleConfigProfile::Payload::Types::Validation> will be
+used to check values when they are added to the array.
 
-If C<$value_type> is a scalar, then C<$value_type> must
-match one of the types from L<XML::AppleConfigProfile::Payload::Types>,
-except for C<$ProfileClass>.  The standard type validation function from
-L<XML::AppleConfigProfile::Payload::Types::Validation> will be used.
-
-If C<$value_type> is not a valid scalar or a valid reference, then an exception
-will be thrown.
+If C<$value_type> is not a valid scalar then an exception will be thrown.
 
 =cut
 
 sub TIEARRAY {
-    my ($class, $value_type, $validator_ref) = @_;
+    my ($class, $value_type) = @_;
     
     # This is what we'll eventually return
     my %object;
@@ -63,57 +59,50 @@ sub TIEARRAY {
     # We'll still have an array, for convenience
     $object{array} = [];
     
-    # If we have a ref, it must be a class
+    # We don't accept refs, only scalars
     if (ref $value_type) {
-        my $value_class = blessed $value_type;
-        if (!defined $value_class) {
-            die "Attempting to pass a non-blessed ref";
-        }
-        $object{is_class} = 1;
-        $object{validator} = $value_class;
+        die "Only scalars are accepted";
     }
     
-    # If we don't have a ref, then it needs to be a specific scalar
+    # Set up the appropriate validator, based on the type
+    if ($value_type == $ProfileString) {
+        $object{validator} = \&validate_string;
+    }
+    elsif ($value_type == $ProfileNumber) {
+        $object{validator} = \&validate_number;
+    }
+    elsif ($value_type == $ProfileReal) {
+        $object{validator} = \&validate_real;
+    }
+    elsif (   ($value_type == $ProfileData)
+           || ($value_type == $ProfileNSDataBlob)
+    ) {
+        $object{validator} = \&validate_data;
+    }
+    elsif ($value_type == $ProfileBool) {
+        $object{validator} = \&validate_bool;
+    }
+    elsif ($value_type == $ProfileDate) {
+        $object{validator} = \&validate_date;
+    }
+    elsif ($value_type == $ProfileUUID) {
+        $object{validator} = \&validate_uuid;
+    }
+    elsif ($value_type == $ProfileIdentifier) {
+        $object{validator} = \&validate_identifier;
+    }
+    elsif ($value_type == $ProfileClass) {
+        $object{validator} = \&validate_class;
+    }
     else {
-        $object{is_class} = 0;
-        
-        # Set up the appropriate validator, based on the type
-        if ($value_type == $ProfileString) {
-            $object{validator} = \&validate_string;
-        }
-        elsif ($value_type == $ProfileNumber) {
-            $object{validator} = \&validate_number;
-        }
-        elsif ($value_type == $ProfileReal) {
-            $object{validator} = \&validate_real;
-        }
-        elsif (   ($value_type == $ProfileData)
-               || ($value_type == $ProfileNSDataBlob)
-        ) {
-            $object{validator} = \&validate_data;
-        }
-        elsif ($value_type == $ProfileBool) {
-            $object{validator} = \&validate_bool;
-        }
-        elsif ($value_type == $ProfileDate) {
-            $object{validator} = \&validate_date;
-        }
-        elsif ($value_type == $ProfileUUID) {
-            $object{validator} = \&validate_uuid;
-        }
-        elsif ($value_type == $ProfileIdentifier) {
-            $object{validator} = \&validate_identifier;
-        }
-        else {
-            die "Value type is unknown";
-        }
-    } # Done checking for ref vs. scalar
+        die "Value type is unknown";
+    }
 
     return bless \%object, $class;
 }
 
 
-=head2 FETCH
+=head3 FETCH
 
 Works as one would expect with a Perl array.  Returns the entry at the specified
 index.  Since methods are in place to prevent storing C<undef>, as long as the
@@ -128,7 +117,7 @@ sub FETCH {
 }
 
 
-=head2 STORE
+=head3 STORE
 
 Storing items at a specific index is not allowed.  This is to help prevent
 C<undef> from appearing in the array.  Instead, use C<push> or C<unshift>.
@@ -193,7 +182,7 @@ sub EXTEND {
 }
 
 
-=head2 exists
+=head3 exists
 
 Works as expected for a Perl array: Returns true if the specified index is
 still valid for the array.
@@ -208,7 +197,7 @@ sub EXISTS {
 }
 
 
-=head2 CLEAR
+=head3 CLEAR
 
 Replacing the array with an empty list works to remove all of the entries from
 the array.
@@ -222,7 +211,7 @@ sub CLEAR {
 }
 
 
-=head2 push
+=head3 push
 
 Works as expected for a Perl array, with two exceptions:
 
@@ -254,7 +243,7 @@ sub PUSH {
 }
 
 
-=head2 pop
+=head3 pop
 
 Works as expected for a Perl array.
 
@@ -266,7 +255,7 @@ sub POP {
 }
 
 
-=head2 shift
+=head3 shift
 
 Works as expected for a Perl array.
 
@@ -278,7 +267,7 @@ sub SHIFT {
 }
 
 
-=head2 unshift
+=head3 unshift
 
 Works as expected for a Perl array, with two exceptions:
 
@@ -309,7 +298,7 @@ sub UNSHIFT {
 }
 
 
-=head2 splice
+=head3 splice
 
 Works as expected for a Perl array, but if you are using C<splice> to add
 entries to the array, take note of these two exceptions:
@@ -355,11 +344,11 @@ sub SPLICE {
     }
     
     # Do the splice and return.
-    return splice($self->{array}, $offset , $length, @_);
+    return splice(@{$self->{array}}, $offset , $length, @_);
 }
 
 
-=head2 _validate
+=head3 _validate
 
 Given a list of items, each one will be validated, and the validated list will
 be returned.
@@ -391,27 +380,15 @@ sub _validate {
             die "Adding undef items is not allowed";
         }
         
-        # If we are an array of objects, check the class name
-        if ($self->{is_class}) {
-            my $item_class = blessed $item;
-            if ($item_class ne $self->{validator}) {
-                die "Attempting to add item of a different class";
-            }
-            $validated_array[$i] = $item;
+        # Call the validation routine
+        my $validated_item = $self->{validator}->($item);
+        
+        # If $item suddenly became undef, it was invalid
+        if (!defined $validated_item) {
+            die "Attempting to insert invalid item";
         }
         
-        # If we are not objects, then use the validation routine
-        else {
-            # Call the validation routine
-            my $validated_item = $self->{validator}->($item);
-        
-            # If $item suddenly became undef, it was invalid
-            if (!defined $validated_item) {
-                die "Attempting to insert invalid item";
-            }
-            
-            $validated_array[$i] = $validated_item;
-        } # Done checking class or not-class
+        $validated_array[$i] = $validated_item;
     } # Done checking each item
     
     return @validated_array;

@@ -8,13 +8,15 @@ use strict;
 use warnings FATAL => 'all';
 use base qw(XML::AppleConfigProfile::Payload::Certificate);
 
-our $VERSION = '0.00_001';
+our $VERSION = '0.00_002';
 
 use Readonly;
 use XML::AppleConfigProfile::Targets qw(:all);
 use XML::AppleConfigProfile::Payload::Certificate;
 use XML::AppleConfigProfile::Payload::Types qw($ProfileNumber $ProfileString);
 
+
+=encoding utf8
 
 =head1 NAME
 
@@ -23,7 +25,7 @@ a PEM-format certificate.
 
 =head1 SYNOPSIS
 
-    use XML::AppleConfigProfile::Profile;
+    use XML::AppleConfigProfile;
     use XML::AppleConfigProfile::Payload::Certificate::PEM;
     
     my $cert = new XML::AppleConfigProfile::Payload::Certificate::PEM;
@@ -34,17 +36,17 @@ a PEM-format certificate.
     $cert->payload->{PayloadCertificateFileName} = 'acme.crt'; 
     $cert->payload->{PayloadContent} = '.................'; # Long string here
     
-    my $profile = new XML::AppleConfigProfile::Profile;
+    my $profile = new XML::AppleConfigProfile;
     push @{$profile->content}, $cert;
     
-    print $profile->string;
+    print $profile->export;
     
 =head1 DESCRIPTION
 
 This class implements the PEM type of Certificate payload.
 
 This payload contains a single certificate, in a PKCS#1 container,
-PEM-encoded.  In other words, if you've got a file that has "BEGIN CERTIFICATE"
+PEM-encoded.  If you have a file that has "BEGIN CERTIFICATE"
 in it, you've probably got this type of certificate.
 
 This payload is used to hold B<only one> certificate.  If you have multiple
@@ -96,7 +98,7 @@ Readonly our %payloadKeys => (
 
 =head1 ACKNOWLEDGEMENTS
 
-Refer to the L<XML::AppleConfigProfile> for acknowledgements.
+Refer to L<XML::AppleConfigProfile> for acknowledgements.
 
 =head1 AUTHOR
 

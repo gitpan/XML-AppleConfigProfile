@@ -7,7 +7,7 @@ use 5.14.4;
 use strict;
 use warnings FATAL => 'all';
 
-our $VERSION = '0.00_001';
+our $VERSION = '0.00_002';
 
 use Data::GUID;
 use Encode;
@@ -23,6 +23,8 @@ use XML::AppleConfigProfile::Payload::Types::Serialize qw(serialize);
 use XML::AppleConfigProfile::Payload::Types::Validation;
 use XML::AppleConfigProfile::Targets qw(:all);
 
+
+=encoding utf8
 
 =head1 NAME
 
@@ -141,8 +143,7 @@ you can use C<defined> to test if a particular key actually has a value defined.
 Take note that calling C<defined> with an invalid key name will always return
 false.
 
-You can use C<delete> to delete a key, even if that key is required.  Setting
-the key's value to C<undef> will do the same thing.
+You can use C<delete> to delete a key.
 
 =cut
 
@@ -265,7 +266,7 @@ sub plist {
     # Go through each key that could exist, and skip the ones that are undef.
     Readonly my $keys => $self->keys();
     Readonly my $payload => $self->payload();
-    foreach my $key (CORE::keys($keys)) {
+    foreach my $key (CORE::keys(%$keys)) {
         # If the key isn't set, then skip it
         next unless defined($payload->{$key});
         
@@ -335,28 +336,54 @@ sub populate_id {
     
     # Go through each key, and check the type
     foreach my $key (CORE::keys %$keys) {
-        # We can fill in UUIDs
-        if ($keys->{$key}->{type} eq $ProfileUUID) {
+        my $type = $keys->{$key}->{type};
+        
+        # We can call this method on other classes
+        if (   ($type !~ m/^\d+$/)
+            || ($type == $ProfileClass)
+        ) {
+            # Only populate IDs on objects that exist
             if (defined $payload->{$key}) {
+                my $object = $payload->{$key};
+                $object->populate_id();
+            }
+        }
+
+        # We can fill in UUIDs
+        elsif ($type == $ProfileUUID) {
+            if (!defined $payload->{$key}) {
                 # Make a new (random) GUID
                 $payload->{$key} = new Data::GUID;
             }
         }
         
         # We can fill in identifiers
-        elsif ($keys->{$key}->{type} eq $ProfileIdentifier) {
-            if (defined $payload->{$key}) {
+        elsif ($type == $ProfileIdentifier) {
+            if (!defined $payload->{$key}) {
                 # Just make some simple random identifier
                 $payload->{$key} = 'payload' . int(rand(2**30));
             }
         }
         
-        # We can call this method on other classes
-        elsif ($keys->{$key}->{type} eq $ProfileClass) {
-            # Only populate IDs on objects that exist
-            if (defined $payload->{$key}) {
-                my $object = $payload->{$key};
-                $object->populate_id();
+        # If we have an array of objects, we can do them, too!
+        elsif (   ($type == $ProfileArray)
+               && (   $keys->{$key}->{subtype} !~ m/^\d+$/
+                   || $keys->{$key}->{subtype} == $ProfileClass
+                  )
+        ) {
+            foreach my $item (@{$payload->{$key}}) {
+                $item->populate_id();
+            }
+        }
+        
+        # If we have an dictionary of objects, we can do them, also!
+        elsif (   ($type == $ProfileDict)
+               && (   $keys->{$key}->{subtype} !~ m/^\d+$/
+                   || $keys->{$key}->{subtype} == $ProfileClass
+                  )
+        ) {
+            foreach my $item (CORE::keys %{$payload->{$key}}) {
+                $payload->{$key}->{$item}->populate_id();
             }
         }
         
